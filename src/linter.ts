@@ -3,6 +3,7 @@ import readline from 'readline';
 import path from 'path';
 import { once } from 'events';
 import { Task } from 'tasktree-cli/lib/task';
+import { lint, Emitters, CSpellApplicationOptions } from 'cspell/dist/application';
 import { Commit } from './entities/commit';
 import { PluginOption } from './config/config';
 import { PluginLoader } from './plugins/plugin-loader';
@@ -116,6 +117,8 @@ export class Linter {
             const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity });
             const lines: string[] = [];
 
+            this.spellCheck(filePath);
+
             rl.on('line', (line): void => {
                 if (line.trim()[0] !== Linter.COMMENT_SIGN) lines.push(line);
             });
@@ -173,5 +176,16 @@ export class Linter {
         if (plugin instanceof CommitPlugin) {
             (plugin as CommitPlugin).lint(options, task);
         }
+    }
+
+    private spellCheck(filename: string): void {
+        const emitters = {} as Emitters;
+        const options = {} as CSpellApplicationOptions;
+
+        this.task.log(`checking file in cSpell: ${filename}`);
+
+        lint([filename], options, emitters);
+
+        // TODO: Output errors from cSpell.
     }
 }

@@ -42,9 +42,11 @@
         "node": ">=10.0.0"
     },
     "dependencies": {
+        "@types/minimatch": "^3.0.3",
         "chalk": "^2.4.2",
         "command-line-args": "^5.1.1",
         "cosmiconfig": "^5.2.1",
+        "cspell": "^4.0.30",
         "deepmerge": "^4.0.0",
         "dotenv": "^8.1.0",
         "findup-sync": "^4.0.0",
@@ -66,7 +68,6 @@
         "@types/semver": "^6.0.2",
         "@typescript-eslint/eslint-plugin": "^2.1.0",
         "@typescript-eslint/parser": "^2.1.0",
-        "cspell": "^4.0.30",
         "eslint": "^6.3.0",
         "eslint-config-airbnb-base": "^14.0.0",
         "eslint-config-prettier": "^6.2.0",
