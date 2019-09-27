@@ -77,7 +77,7 @@ export class State implements StateContext {
         let minor = 0;
         let patch = 0;
 
-        this.commits.forEach((commit): void => {
+        this.commits.forEach(commit => {
             switch (commit.getChangeLevel()) {
                 case ChangeLevel.Major:
                     major++;
@@ -101,11 +101,11 @@ export class State implements StateContext {
         let typeName: string | undefined;
         let tuple: [string, ChangeLevel] | undefined;
 
-        this.commits.forEach((commit): void => {
+        this.commits.forEach(commit => {
             typeName = commit.getTypeName();
 
             if (typeName) {
-                tuple = types.find(([name]): boolean => Key.isEqual(typeName as string, name));
+                tuple = types.find(([name]) => Key.isEqual(typeName as string, name));
 
                 if (tuple) {
                     commit.setChangeLevel(tuple[1]);
@@ -130,7 +130,7 @@ export class State implements StateContext {
     }
 
     public ignoreEntities(exclusions: [ExclusionType, string[]][]): void {
-        exclusions.forEach(([type, rules]): void => {
+        exclusions.forEach(([type, rules]) => {
             switch (type) {
                 case ExclusionType.AuthorLogin:
                     Filter.authorsByLogin(this.authors, rules);
@@ -154,7 +154,7 @@ export class State implements StateContext {
     public async modify(plugins: [string, PluginOption][]): Promise<void> {
         const task = TaskTree.add('Modifying release state...');
 
-        await Promise.all(plugins.map(([name, options]): Promise<void> => this.modifyWithPlugin(name, options, task)));
+        await Promise.all(plugins.map(([name, options]) => this.modifyWithPlugin(name, options, task)));
         this.rebuildSectionsTree();
         task.complete('Release status modified');
     }
@@ -166,7 +166,7 @@ export class State implements StateContext {
         if (sections.length) {
             const relations: Map<string, Section> = new Map();
 
-            sections.forEach((section): void => {
+            sections.forEach(section => {
                 if (section.getPosition() === SectionPosition.Group) {
                     section.assignAsSubsection(relations);
                 } else {
@@ -177,7 +177,7 @@ export class State implements StateContext {
 
         this.sections = sections
             .filter(Section.filter)
-            .filter((section): boolean => section.getPosition() !== SectionPosition.Subsection)
+            .filter(section => section.getPosition() !== SectionPosition.Subsection)
             .sort(Section.compare);
         task.complete('Section tree is consistently');
     }
@@ -192,9 +192,7 @@ export class State implements StateContext {
         switch (true) {
             case plugin instanceof CommitPlugin:
                 await Promise.all(
-                    [...this.commits.values()].map(
-                        (commit): Promise<void> => (plugin as CommitPlugin).parse(commit, task)
-                    )
+                    [...this.commits.values()].map(commit => (plugin as CommitPlugin).parse(commit, task))
                 );
                 break;
             case plugin instanceof StatePlugin:

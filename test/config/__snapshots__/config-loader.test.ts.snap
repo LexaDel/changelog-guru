@@ -121,7 +121,13 @@ Array [
     "highlight",
     Object {
       "camelCase": true,
-      "masks": Array [],
+      "masks": Array [
+        "<[^>]*>",
+        "[$@!]\\\\S+",
+        "((?<= )|^)-{1,2}[a-z0-9_-]+",
+        "(?<= |^)[a-z]+-[a-z-]+",
+        "(?<= |^)[a-z0-9_$\\\\[\\\\]()]+\\\\.[a-z0-9_$.()]+",
+      ],
     },
   ],
   Array [
@@ -130,7 +136,6 @@ Array [
       "actions": Array [
         "ignore",
         "group",
-        "escaped",
       ],
       "joins": Object {
         "break": "BREAKING CHANGES",

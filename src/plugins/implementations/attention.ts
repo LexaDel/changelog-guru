@@ -110,11 +110,9 @@ export default class AttentionPlugin extends StatePlugin {
             this.section.setOrder(SectionOrder.Min);
 
             Object.entries(config.templates).forEach(
-                ([name, value]: [string, PluginOption | PluginOption[] | PluginOptionValue | undefined]): void => {
+                ([name, value]: [string, PluginOption | PluginOption[] | PluginOptionValue | undefined]) => {
                     if (typeof value === 'string') {
-                        const type = Object.values(PackageRuleChangeType).find(
-                            (itemName): boolean => itemName === name
-                        );
+                        const type = Object.values(PackageRuleChangeType).find(itemName => itemName === name);
 
                         if (value && type) {
                             this.templates.set(type, value);
@@ -123,7 +121,7 @@ export default class AttentionPlugin extends StatePlugin {
                 }
             );
 
-            config.sections.forEach((type): void => {
+            config.sections.forEach(type => {
                 this.sections.add(type);
             });
         }
@@ -162,7 +160,6 @@ export default class AttentionPlugin extends StatePlugin {
                 message = new Message(`Source code now under ${Markdown.wrap(license.id)} license.`);
             }
 
-            message.escape();
             subsection.add(message);
             section.add(subsection);
         }
@@ -176,26 +173,23 @@ export default class AttentionPlugin extends StatePlugin {
         let list: string[];
         let order = 0;
 
-        this.sections.forEach((type): void => {
+        this.sections.forEach(type => {
             rule = this.context.getPackageRule(type);
 
             if (rule) {
                 subsection = new Section(AttentionPlugin.getSubtitle(type, task), SectionPosition.Subsection);
                 list = [];
 
-                this.templates.forEach((template, changeType): void => {
+                this.templates.forEach((template, changeType) => {
                     changes = (rule as PackageRule).getChanges(changeType);
 
                     if (changes.length) {
-                        list.push(
-                            ...changes.map((change): string => AttentionPlugin.renderTemplate(template, change, task))
-                        );
+                        list.push(...changes.map(change => AttentionPlugin.renderTemplate(template, change, task)));
                     }
                 });
 
                 if (list.length) {
                     message = new Message(list.join(Markdown.LINE_SEPARATOR));
-                    message.escape();
                     subsection.setOrder(order++);
                     subsection.add(message);
                     section.add(subsection);

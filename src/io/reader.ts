@@ -38,7 +38,7 @@ export class Reader {
     private async loadCommits(count: number, state: State, date: Date): Promise<void> {
         const pagesCount = Math.ceil(count / Provider.PAGE_SIZE);
         const task = TaskTree.add('Loading commits...');
-        const bar = task.bar(':bar :percent :etas', { total: pagesCount });
+        const bar = task.bar(':bar :percent :etas', { total: count });
         const promises = [];
         let pageIndex = 0;
 
@@ -53,7 +53,7 @@ export class Reader {
     private async loadCommitsPage(index: number, state: State, date: Date, progress: ProgressBar): Promise<void> {
         const commits = await this.provider.getCommits(date, index);
 
-        commits.forEach((commit): void => state.addCommit(commit));
+        commits.forEach(commit => state.addCommit(commit));
         progress.tick(commits.length);
     }
 
@@ -62,11 +62,11 @@ export class Reader {
 
         state.setLicense(packageInfo.getLicense(), data.license);
 
-        Object.values(DependencyRuleType).forEach((type): void => {
+        Object.values(DependencyRuleType).forEach(type => {
             state.setPackageRule(new DependencyRule(type, ...packageInfo.getDependenciesStory(type, data)));
         });
 
-        Object.values(RestrictionRuleType).forEach((type): void => {
+        Object.values(RestrictionRuleType).forEach(type => {
             state.setPackageRule(new RestrictionRule(type, ...packageInfo.getRestrictionsStory(type, data)));
         });
     }
