@@ -5,15 +5,16 @@ import { ConfigLoader } from '../../src/config/config-loader';
 import { Config, ChangeLevel } from '../../src/config/config';
 import { SectionPosition } from '../../src/entities/section';
 
-// eslint-disable-next-line max-lines-per-function
-describe('State', (): void => {
+describe('State', () => {
     const getAuthor = (login: string): Author =>
-        new Author(login, {
+        new Author({
+            login,
             url: `https://github.com/${login}`,
             avatar: 'https://avatars3.githubusercontent.com/u/4527292?v=4',
         });
     const getCommit = (id: number, header: string, author: Author): Commit =>
-        new Commit(`b816518030dace1b91838ae0abd56fa88eba19f${id}`, {
+        new Commit({
+            hash: `b816518030dace1b91838ae0abd56fa88eba19f${id}`,
             author,
             header,
             timestamp: 0,
@@ -22,10 +23,10 @@ describe('State', (): void => {
     let $loader: ConfigLoader;
     let $config: Config;
 
-    beforeAll((done): void => {
+    beforeAll(done => {
         $loader = new ConfigLoader();
 
-        $loader.load().then((config): void => {
+        $loader.load().then(config => {
             $config = config;
 
             done();
@@ -33,7 +34,7 @@ describe('State', (): void => {
     });
 
     // eslint-disable-next-line max-lines-per-function
-    it('Default', (done): void => {
+    it('Default', done => {
         const state = new MockState();
         const author1 = getAuthor('dev1');
         const author2 = getAuthor('dev2');
@@ -71,7 +72,7 @@ describe('State', (): void => {
             expect(state.getAuthors()).toStrictEqual([author1, author2]);
             expect(state.getCommits()).toStrictEqual([commit2, commit3, commit1]);
 
-            state.modify([['commit.mock', {}], ['state.mock', {}]]).then((): void => {
+            state.modify([['commit.mock', {}], ['state.mock', {}]]).then(() => {
                 expect(state.getSections()).toStrictEqual([section1]);
 
                 done();
@@ -79,7 +80,7 @@ describe('State', (): void => {
         }
     });
 
-    it('Add & find section', (): void => {
+    it('Add & find section', () => {
         const state = new MockState();
         const section = state.addSection('header section', SectionPosition.Header);
 
